@@ -17,7 +17,7 @@ const config = require('./utils/config');
 
 const app = express();
 
-// Connect to MongoDB
+// Connect to MongoDB (Atlas or local URI as set in .env)
 connectDatabase();
 
 // Security headers

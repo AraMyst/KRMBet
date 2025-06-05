@@ -3,7 +3,7 @@
 require('dotenv').config();
 
 module.exports = {
-  // MongoDB connection URI
+  // MongoDB connection URI (Atlas or local fallback)
   DATABASE_URI: process.env.DATABASE_URI || 'mongodb://localhost:27017/bettingdb',
 
   // JWT secret for signing and verifying tokens
