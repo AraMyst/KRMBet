@@ -1,33 +1,50 @@
+// src/controllers/authController.js
+
 const authService = require('../services/authService');
 
-// Register a new user
-// POST /api/auth/register
+/**
+ * Register a new user
+ * POST /api/auth/register
+ */
 exports.register = async (req, res, next) => {
   try {
-    const { name, email, password, birthdate } = req.body;
+    const { name, email, password, birthDate } = req.body;
 
     // Basic field validation
-    if (!name || !email || !password || !birthdate) {
-      return res.status(400).json({ message: 'Name, email, password and birthdate are required.' });
+    if (!name || !email || !password || !birthDate) {
+      return res
+        .status(400)
+        .json({ message: 'Name, email, password and birthDate are required.' });
     }
 
+    // Validate date format (YYYY-MM-DD)
+    // Opcional: se quiser usar a função isValidDateString do utils/validators.js:
+    // const { isValidDateString } = require('../utils/validators');
+    // if (!isValidDateString(birthDate)) {
+    //   return res.status(400).json({ message: 'birthDate must be in YYYY-MM-DD format.' });
+    // }
+
     // Check if user is at least 18 years old
-    const birthDateObj = new Date(birthdate);
+    const birthDateObj = new Date(birthDate);
     const today = new Date();
     const ageDifMs = today - birthDateObj;
     const ageDate = new Date(ageDifMs);
     const age = Math.abs(ageDate.getUTCFullYear() - 1970);
     if (age < 18) {
-      return res.status(403).json({ message: 'You must be at least 18 years old to register.' });
+      return res
+        .status(403)
+        .json({ message: 'You must be at least 18 years old to register.' });
     }
 
     // Attempt to create new user via authService
-    // authService.register should:
-    // 1) Check if email already exists (throw error if so)
-    // 2) Hash the password
-    // 3) Save user record with name, email, passwordHash, birthdate, initial balance, etc.
-    // 4) Generate a JWT token
-    const { user, token } = await authService.register({ name, email, password, birthdate });
+    // Passando birthDate (camelCase) para o serviço como "birthdate" (lowercase),
+    // já que é assim que o model espera.
+    const { user, token } = await authService.register({
+      name,
+      email,
+      password,
+      birthdate: birthDate,
+    });
 
     // Return basic user info and auth token
     res.status(201).json({
@@ -48,23 +65,22 @@ exports.register = async (req, res, next) => {
   }
 };
 
-// Log in existing user
-// POST /api/auth/login
+/**
+ * Log in existing user
+ * POST /api/auth/login
+ */
 exports.login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
 
     // Basic field validation
     if (!email || !password) {
-      return res.status(400).json({ message: 'Email and password are required.' });
+      return res
+        .status(400)
+        .json({ message: 'Email and password are required.' });
     }
 
     // Attempt to authenticate via authService
-    // authService.login should:
-    // 1) Find user by email
-    // 2) Compare provided password with stored hash
-    // 3) If valid, return { user, token }
-    // 4) If invalid credentials, throw an "InvalidCredentials" error
     const { user, token } = await authService.login({ email, password });
 
     // Return user info and auth token
@@ -80,15 +96,19 @@ exports.login = async (req, res, next) => {
   } catch (err) {
     // If invalid credentials
     if (err.code === 'InvalidCredentials') {
-      return res.status(401).json({ message: 'Invalid email or password.' });
+      return res
+        .status(401)
+        .json({ message: 'Invalid email or password.' });
     }
     next(err);
   }
 };
 
-// Get current user profile
-// GET /api/auth/profile
-// Requires valid JWT; authMiddleware must populate req.user = { id, email }
+/**
+ * Get current user profile
+ * GET /api/auth/profile
+ * Requires valid JWT; authMiddleware must populate req.user = { id, email }
+ */
 exports.getProfile = async (req, res, next) => {
   try {
     const userId = req.user.id;
