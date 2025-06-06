@@ -1,4 +1,4 @@
-// utils/database.js
+// backend/src/utils/database.js
 
 const mongoose = require('mongoose');
 const config = require('./config');

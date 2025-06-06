@@ -1,4 +1,4 @@
-// utils/validators.js
+// backend/src/utils/validators.js
 
 const validator = require('validator');
 
@@ -38,7 +38,10 @@ function isStrongPassword(password) {
  * Returns true if valid date string, false otherwise.
  */
 function isValidDateString(dateStr) {
-  return typeof dateStr === 'string' && validator.isDate(dateStr, { format: 'YYYY-MM-DD', strictMode: true });
+  return (
+    typeof dateStr === 'string' &&
+    validator.isDate(dateStr, { format: 'YYYY-MM-DD', strictMode: true })
+  );
 }
 
 /**

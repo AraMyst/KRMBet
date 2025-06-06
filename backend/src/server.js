@@ -1,4 +1,6 @@
-// server.js
+// backend/src/server.js
+
+require('dotenv').config(); // Load environment variables from .env
 
 const app = require('./app');
 const config = require('./utils/config');
