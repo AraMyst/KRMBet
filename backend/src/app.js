@@ -1,4 +1,4 @@
-// app.js
+// backend/src/app.js
 
 const express = require('express');
 const helmet = require('helmet');
@@ -12,6 +12,8 @@ const casinoRoutes = require('./routes/casinoRoutes');
 const paymentRoutes = require('./routes/paymentRoutes');
 const promotionRoutes = require('./routes/promotionRoutes');
 const userRoutes = require('./routes/userRoutes');
+const oddsRoutes = require('./routes/oddsRoutes');       // << new
+const eventRoutes = require('./routes/eventRoutes');     // << new
 const { connectDatabase } = require('./utils/database');
 const config = require('./utils/config');
 
@@ -35,13 +37,17 @@ app.use(express.json());
 // Internationalization middleware
 app.use(i18nMiddleware);
 
-// Mount route handlers
+// Mount existing route handlers
 app.use('/api/auth', authRoutes);
 app.use('/api/bets', betRoutes);
 app.use('/api/casino', casinoRoutes);
 app.use('/api/payment', paymentRoutes);
 app.use('/api/promotions', promotionRoutes);
 app.use('/api/user', userRoutes);
+
+// Mount new Odds & Events routes (public endpoints)
+app.use('/api/odds', oddsRoutes);
+app.use('/api/events', eventRoutes);
 
 // Global error handler (must be after all routes)
 app.use(errorHandler);
