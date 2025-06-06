@@ -5,27 +5,17 @@ const oddsService = require('../services/oddsService');
 /**
  * GET /api/events/:sportKey
  *
- * Returns a list of “events” (no odds) for the given sportKey.
- * Internally calls oddsService.getOddsBySport(sportKey), then maps to:
- *   {
- *     eventId,
- *     sportKey,
- *     commenceTime,
- *     homeTeam,
- *     awayTeam
- *   }
+ * Retorna array de objetos de evento (sem odds) para o sportKey solicitado.
  *
- * Example response:
- * [
- *   {
- *     eventId: "some-event-id",
- *     sportKey: "soccer_epl",
- *     commenceTime: "2025-06-07T15:00:00.000Z",
- *     homeTeam: "Arsenal",
- *     awayTeam: "Chelsea"
- *   },
- *   { ... }
- * ]
+ * Cada objeto:
+ * {
+ *   id: "a512a48a58c4329048174217b2cc7ce0",
+ *   sport_key: "americanfootball_nfl",
+ *   sport_title: "NFL",
+ *   commence_time: "2023-01-01T18:00:00Z",
+ *   home_team: "Atlanta Falcons",
+ *   away_team: "Arizona Cardinals"
+ * }
  */
 exports.getEventsBySport = async (req, res, next) => {
   try {
@@ -36,24 +26,21 @@ exports.getEventsBySport = async (req, res, next) => {
         .json({ message: 'Missing required path parameter: sportKey.' });
     }
 
-    // Fetch the raw events + bestOdds data
-    const oddsArray = await oddsService.getOddsBySport(sportKey);
+    // Podemos ler filtros opcionais via query: daysFrom, commenceTimeFrom/To, eventIds
+    const options = {
+      dateFormat: req.query.dateFormat,            // ex.: "iso"
+      commenceTimeFrom: req.query.commenceTimeFrom, // ex.: "2023-09-09T00:00:00Z"
+      commenceTimeTo: req.query.commenceTimeTo,     // ex.: "2023-09-10T23:59:59Z"
+      eventIds: req.query.eventIds                  // ex.: "evt1,evt2"
+    };
 
-    // Map out only event fields (no bestOdds)
-    const eventsOnly = oddsArray.map((evt) => ({
-      eventId: evt.eventId,
-      sportKey: evt.sportKey,
-      commenceTime: evt.commenceTime,
-      homeTeam: evt.homeTeam,
-      awayTeam: evt.awayTeam,
-    }));
-
-    return res.status(200).json(eventsOnly);
+    const eventsArray = await oddsService.getEventsBySport(sportKey, options);
+    return res.status(200).json(eventsArray);
   } catch (err) {
-    if (err.code === 'RateLimit') {
+    if (err.code === 'Unauthorized') {
       return res
-        .status(429)
-        .json({ message: 'External Odds API rate limit exceeded. Try again later.' });
+        .status(401)
+        .json({ message: 'Unauthorized to access external Odds API for events. Check your API key.' });
     }
     return next(err);
   }

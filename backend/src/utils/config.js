@@ -14,5 +14,5 @@ module.exports = {
   ODDS_API_KEY: process.env.ODDS_API_KEY || '',
 
   // Server port
-  PORT: process.env.PORT || 4000,
+  PORT: process.env.PORT || 3000,
 };

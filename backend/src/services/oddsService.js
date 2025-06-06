@@ -4,94 +4,226 @@ const axios = require('axios');
 const config = require('../utils/config');
 
 /**
- * Fetch odds for a given sportKey from the external Odds API,
- * then determine the best (highest) odds for each outcome across all bookmakers.
+ * Fetch all available sports (sport keys) from the external Odds API.
+ * GET /v4/sports?apiKey=YOUR_API_KEY
  *
- * Returns an array of event objects, each in the form:
- * {
- *   eventId: String,
- *   sportKey: String,
- *   commenceTime: Date,
- *   homeTeam: String,
- *   awayTeam: String,
- *   bestOdds: {
- *     home_win: Number,
- *     draw: Number,       // only for sports/markets that have draw
- *     away_win: Number,
- *   }
- * }
+ * Returns an array of sport objects:
+ * [
+ *   {
+ *     key: "americanfootball_nfl",
+ *     group: "American Football",
+ *     title: "NFL",
+ *     description: "US Football",
+ *     active: true,
+ *     has_outrights: false
+ *   },
+ *   { ... }
+ * ]
  */
-async function getOddsBySport(sportKey) {
-  // 1) Build URL to fetch all odds for this sport
-  const baseUrl = `${config.ODDS_API_BASE_URL}/sports/${sportKey}/odds`;
+async function getAllSports() {
+  const baseUrl = `${config.ODDS_API_BASE_URL}/sports`;
   const params = {
     apiKey: config.ODDS_API_KEY,
-    regions: 'us',       // adjust region filter as needed
-    markets: 'h2h',      // head-to-head (1X2); adapt for other markets if necessary
-    oddsFormat: 'decimal',
-    dateFormat: 'iso',
+    all: false // Opcional: true para retornar também esportes fora de temporada
   };
 
   let response;
   try {
     response = await axios.get(baseUrl, { params });
   } catch (err) {
-    // If external API returns 429, wrap in our own RateLimit error
+    // Se vier 401 Unauthorized do servidor externo
+    throw err;
+  }
+
+  return response.data;
+}
+
+/**
+ * Fetch upcoming and in-play events for a given sport.
+ * GET /v4/sports/{sportKey}/events?apiKey=YOUR_API_KEY&dateFormat=iso
+ *
+ * Returns an array de objetos de evento:
+ * [
+ *   {
+ *     id: "a512a48a58c4329048174217b2cc7ce0",
+ *     sport_key: "americanfootball_nfl",
+ *     sport_title: "NFL",
+ *     commence_time: "2023-01-01T18:00:00Z",
+ *     home_team: "Atlanta Falcons",
+ *     away_team: "Arizona Cardinals"
+ *   },
+ *   { ... }
+ * ]
+ */
+async function getEventsBySport(sportKey, options = {}) {
+  // options: { dateFormat, commenceTimeFrom, commenceTimeTo, eventIds }
+  const baseUrl = `${config.ODDS_API_BASE_URL}/sports/${sportKey}/events`;
+  const params = {
+    apiKey: config.ODDS_API_KEY,
+    dateFormat: options.dateFormat || 'iso',
+    ...('commenceTimeFrom' in options ? { commenceTimeFrom: options.commenceTimeFrom } : {}),
+    ...('commenceTimeTo' in options ? { commenceTimeTo: options.commenceTimeTo } : {}),
+    ...('eventIds' in options ? { eventIds: options.eventIds } : {})
+  };
+
+  let response;
+  try {
+    response = await axios.get(baseUrl, { params });
+  } catch (err) {
+    if (err.response && err.response.status === 401) {
+      const error = new Error('Unauthorized to access external Odds API for events.');
+      error.code = 'Unauthorized';
+      throw error;
+    }
+    throw err;
+  }
+
+  return response.data;
+}
+
+/**
+ * Fetch odds for a given sportKey from the external Odds API,
+ * then determine the best (highest) odds for each outcome across all bookmakers.
+ * GET /v4/sports/{sportKey}/odds?regions={regions}&markets={markets}&dateFormat={dateFormat}&oddsFormat={oddsFormat}&eventIds={optional}
+ *
+ * Estamos usando esta função para retornar apenas as "bestOdds" de cada evento,
+ * agrupando todos os bookmakers.
+ *
+ * Returns an array of event objects, each in the form:
+ * [
+ *   {
+ *     eventId: "bda33adca828c09dc3cac3a856aef176",
+ *     sportKey: "americanfootball_nfl",
+ *     commenceTime: Date,
+ *     homeTeam: "Tampa Bay Buccaneers",
+ *     awayTeam: "Dallas Cowboys",
+ *     bestOdds: {
+ *       home_win: Number,
+ *       draw: Number (opcional),
+ *       away_win: Number
+ *     }
+ *   },
+ *   { ... }
+ * ]
+ */
+async function getOddsBySport(sportKey, options = {}) {
+  // options: { regions, markets, oddsFormat, dateFormat, eventIds }
+  const baseUrl = `${config.ODDS_API_BASE_URL}/sports/${sportKey}/odds`;
+  const params = {
+    apiKey: config.ODDS_API_KEY,
+    regions: options.regions || 'us',        // ex.: "us" ou "us,uk,eu"
+    markets: options.markets || 'h2h',       // ex.: "h2h,spreads,totals"
+    oddsFormat: options.oddsFormat || 'decimal', // "decimal" ou "american"
+    dateFormat: options.dateFormat || 'iso',     // "iso" ou "unix"
+    ...(options.eventIds ? { eventIds: options.eventIds } : {})
+  };
+
+  let response;
+  try {
+    response = await axios.get(baseUrl, { params });
+  } catch (err) {
+    // Se retornar 429 (rate limit)
     if (err.response && err.response.status === 429) {
       const error = new Error('Odds API rate limit exceeded');
       error.code = 'RateLimit';
       throw error;
     }
-    // Otherwise propagate
+    if (err.response && err.response.status === 401) {
+      const error = new Error('Unauthorized to access external Odds API for odds.');
+      error.code = 'Unauthorized';
+      throw error;
+    }
     throw err;
   }
 
-  const eventsWithOdds = response.data; // Array of events from external API
-  // Each event object structure (example):
+  const eventsWithOdds = response.data; // array de objetos tal como documentado
+
+  // Para cada evento, ele possui:
   // {
-  //   id: 'some-event-id',
-  //   sport_key: 'soccer_epl',
-  //   commence_time: '2025-06-07T15:00:00Z',
-  //   home_team: 'Arsenal',
-  //   away_team: 'Chelsea',
-  //   sites: [
-  //     { site_key: 'bet365', odds: { h2h: [2.5, 3.1, 2.8] } },
-  //     { site_key: 'williamhill', odds: { h2h: [2.55, 3.0, 2.95] } },
-  //     // ...
+  //   id: "bda33adc...", 
+  //   sport_key: "americanfootball_nfl",
+  //   commence_time: "2021-09-10T00:20:00Z",
+  //   home_team: "Tampa Bay Buccaneers",
+  //   away_team: "Dallas Cowboys",
+  //   bookmakers: [
+  //     { 
+  //       key: "fanduel",
+  //       title: "FanDuel",
+  //       last_update: "2021-06-10T10:46:09Z",
+  //       markets: [
+  //         { key: "h2h", 
+  //           outcomes: [
+  //             { name: "Dallas Cowboys", price: 240 },
+  //             { name: "Tampa Bay Buccaneers", price: -303 }
+  //           ]
+  //         },
+  //         { key: "spreads", outcomes: [ ... ] }
+  //       ]
+  //     },
+  //     { ... }
   //   ]
   // }
 
-  // 2) For each event, pick the best (highest) odds for each possible outcome
+  // Agora vamos extrair a “melhor odd” (highest) de cada mercado HEAD-TO-HEAD:
   const result = eventsWithOdds.map((evt) => {
-    const { id, sport_key, commence_time, home_team, away_team, sites } = evt;
+    const {
+      id,
+      sport_key,
+      commence_time,
+      home_team,
+      away_team,
+      bookmakers
+    } = evt;
 
-    // Initialize best odds with zeros
-    let bestHome = 0;
-    let bestDraw = 0;
-    let bestAway = 0;
+    let bestHome = null;
+    let bestDraw = null;
+    let bestAway = null;
 
-    // Iterate over all bookmakers (sites)
-    for (const site of sites) {
-      const h2hOdds = site.odds.h2h || [];
-      // Array h2hOdds format: [home_win_odds, draw_odds, away_win_odds]
-
-      if (h2hOdds.length >= 1 && typeof h2hOdds[0] === 'number' && h2hOdds[0] > bestHome) {
-        bestHome = h2hOdds[0];
-      }
-      // Some sports/markets may not have a draw
-      if (h2hOdds.length >= 2 && typeof h2hOdds[1] === 'number' && h2hOdds[1] > bestDraw) {
-        bestDraw = h2hOdds[1];
-      }
-      if (h2hOdds.length >= 3 && typeof h2hOdds[2] === 'number' && h2hOdds[2] > bestAway) {
-        bestAway = h2hOdds[2];
+    // Iterar sobre todos os bookmakers e seus markets
+    for (const book of bookmakers) {
+      for (const market of book.markets) {
+        if (market.key === 'h2h' && Array.isArray(market.outcomes)) {
+          // outcomes: [
+          //   { name: "Dallas Cowboys", price: 240 },
+          //   { name: "Tampa Bay Buccaneers", price: -303 }
+          // ]
+          // Para saber qual é home e qual é away, precisamos
+          // comparar nomes. Neste caso, "home_team" vs "away_team".
+          for (const outcome of market.outcomes) {
+            if (
+              outcome.name === home_team &&
+              (bestHome === null || outcome.price > bestHome)
+            ) {
+              bestHome = outcome.price;
+            }
+            if (
+              outcome.name === away_team &&
+              (bestAway === null || outcome.price > bestAway)
+            ) {
+              bestAway = outcome.price;
+            }
+            // Se houver empate, não há um draw para esportes sem draw.
+          }
+        }
+        // Mostrar “draw” apenas se existirem 3 outcomes no h2h (ex.: futebol)
+        if (market.key === 'h2h' && Array.isArray(market.outcomes) && market.outcomes.length === 3) {
+          // outcomes[1] provavelmente é o draw
+          const drawOutcome = market.outcomes.find(
+            (o) => o.name !== home_team && o.name !== away_team
+          );
+          if (drawOutcome) {
+            if (bestDraw === null || drawOutcome.price > bestDraw) {
+              bestDraw = drawOutcome.price;
+            }
+          }
+        }
       }
     }
 
-    // Build bestOdds object only including draw when relevant
     const bestOdds = {
-      home_win: bestHome,
-      ...(bestDraw > 0 && { draw: bestDraw }),
-      away_win: bestAway,
+      ...(bestHome !== null ? { home_win: bestHome } : {}),
+      ...(bestDraw !== null ? { draw: bestDraw } : {}),
+      ...(bestAway !== null ? { away_win: bestAway } : {})
     };
 
     return {
@@ -100,13 +232,80 @@ async function getOddsBySport(sportKey) {
       commenceTime: new Date(commence_time),
       homeTeam: home_team,
       awayTeam: away_team,
-      bestOdds,
+      bestOdds
     };
   });
 
   return result;
 }
 
+/**
+ * Fetch odds for a single event, incluindo todos os mercados especificados.
+ * GET /v4/sports/{sportKey}/events/{eventId}/odds?apiKey=...&regions=...&markets=...&oddsFormat=...&dateFormat=...
+ *
+ * Retorna o JSON completo (sem reduzir para apenas “bestOdds”).
+ * Exemplo de retorno:
+ * {
+ *   "id": "a512a48a58c4329048174217b2cc7ce0",
+ *   "sport_key": "americanfootball_nfl",
+ *   "sport_title": "NFL",
+ *   "commence_time": "2023-01-01T18:00:00Z",
+ *   "home_team": "Atlanta Falcons",
+ *   "away_team": "Arizona Cardinals",
+ *   "bookmakers": [
+ *     {
+ *       "key": "draftkings",
+ *       "title": "DraftKings",
+ *       "last_update": "2023-01-01T05:31:29Z",
+ *       "markets": [
+ *         {
+ *           "key": "player_pass_tds",
+ *           "last_update": "2023-01-01T05:31:29Z",
+ *           "outcomes": [
+ *             { "name": "Over", "description": "David Blough", "price": -205, "point": 0.5 },
+ *             { "name": "Under", "description": "David Blough", "price": 150, "point": 0.5 },
+ *             ...
+ *           ]
+ *         }
+ *       ]
+ *     }
+ *   ]
+ * }
+ */
+async function getEventOdds(sportKey, eventId, options = {}) {
+  // options: { regions, markets, oddsFormat, dateFormat }
+  const baseUrl = `${config.ODDS_API_BASE_URL}/sports/${sportKey}/events/${eventId}/odds`;
+  const params = {
+    apiKey: config.ODDS_API_KEY,
+    regions: options.regions || 'us',
+    markets: options.markets || 'h2h',
+    oddsFormat: options.oddsFormat || 'decimal',
+    dateFormat: options.dateFormat || 'iso'
+  };
+
+  let response;
+  try {
+    response = await axios.get(baseUrl, { params });
+  } catch (err) {
+    if (err.response && err.response.status === 429) {
+      const error = new Error('Odds API rate limit exceeded for event odds.');
+      error.code = 'RateLimit';
+      throw error;
+    }
+    if (err.response && err.response.status === 401) {
+      const error = new Error('Unauthorized to access external Odds API for event odds.');
+      error.code = 'Unauthorized';
+      throw error;
+    }
+    throw err;
+  }
+
+  return response.data;
+}
+
 module.exports = {
+  getAllSports,
+  getEventsBySport,
   getOddsBySport,
+  getEventOdds
 };
