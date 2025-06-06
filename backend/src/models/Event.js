@@ -1,9 +1,10 @@
-const mongoose = require('mongoose');
+// backend/src/models/Event.js
 
+const mongoose = require('mongoose');
 const { Schema, model } = mongoose;
 
 /**
- * Event schema represents a sports event retrieved from Odds API.
+ * Event schema represents a sports event retrieved from the Odds API.
  * - eventId: unique identifier from the external API.
  * - sportKey: key for the sport (e.g., 'soccer_epl').
  * - commenceTime: date/time when the event starts.
