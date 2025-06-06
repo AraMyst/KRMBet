@@ -1,5 +1,3 @@
-// backend/src/controllers/eventController.js
-
 const oddsService = require('../services/oddsService');
 
 /**
@@ -37,6 +35,7 @@ exports.getEventsBySport = async (req, res, next) => {
     const eventsArray = await oddsService.getEventsBySport(sportKey, options);
     return res.status(200).json(eventsArray);
   } catch (err) {
+    // If we threw a custom Unauthorized error in the service layer:
     if (err.code === 'Unauthorized') {
       return res
         .status(401)
@@ -45,6 +44,6 @@ exports.getEventsBySport = async (req, res, next) => {
             'Unauthorized to access external Odds API for events. Check your API key.',
         });
     }
-    next(err);
+    return next(err);
   }
 };

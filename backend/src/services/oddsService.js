@@ -1,11 +1,11 @@
-// backend/src/services/oddsService.js
-
 const axios = require('axios');
 const config = require('../utils/config');
 
 /**
  * Fetch all available sports (sport keys) from the external Odds API.
- * Endpoint: GET /v4/sports?apiKey=YOUR_API_KEY
+ * Endpoint (APILayer): GET /v4/sports
+ *   BaseURL: https://api.apilayer.com/odds/v4
+ *   Auth: HTTP header `apikey: YOUR_API_KEY`
  *
  * Returns an array of sport objects, e.g.:
  * [
@@ -21,17 +21,16 @@ const config = require('../utils/config');
  * ]
  */
 async function getAllSports() {
-  const baseUrl = `${config.ODDS_API_BASE_URL}/sports`;
-  const params = {
-    apiKey: config.ODDS_API_KEY,
-    all: false // Optional: set to true to include both in-season and out-of-season sports
+  const url = `${config.ODDS_API_BASE_URL}/sports`;
+  const headers = {
+    apikey: config.ODDS_API_KEY
   };
 
   let response;
   try {
-    response = await axios.get(baseUrl, { params });
+    response = await axios.get(url, { headers });
   } catch (err) {
-    // If we get a 401 Unauthorized from the external API, just throw it
+    // If we get a 401 Unauthorized from the external API, just rethrow
     throw err;
   }
 
@@ -40,7 +39,14 @@ async function getAllSports() {
 
 /**
  * Fetch upcoming and in-play events for a given sport.
- * Endpoint: GET /v4/sports/{sportKey}/events?apiKey=YOUR_API_KEY&dateFormat=iso
+ * Endpoint: GET /v4/sports/{sportKey}/events
+ * Auth: HTTP header `apikey: YOUR_API_KEY`
+ *
+ * `options` can include:
+ *   - dateFormat: "iso" or "unix"
+ *   - commenceTimeFrom: ISO timestamp string (e.g. "2023-09-09T00:00:00Z")
+ *   - commenceTimeTo: ISO timestamp string (e.g. "2023-09-10T23:59:59Z")
+ *   - eventIds: comma-separated event IDs string (e.g. "evt1,evt2")
  *
  * Returns an array of event objects, e.g.:
  * [
@@ -54,26 +60,22 @@ async function getAllSports() {
  *   },
  *   { ... }
  * ]
- *
- * `options` can include:
- *   - dateFormat: "iso" or "unix"
- *   - commenceTimeFrom: ISO timestamp string (e.g. "2023-09-09T00:00:00Z")
- *   - commenceTimeTo: ISO timestamp string (e.g. "2023-09-10T23:59:59Z")
- *   - eventIds: comma-separated event IDs string (e.g. "evt1,evt2")
  */
 async function getEventsBySport(sportKey, options = {}) {
-  const baseUrl = `${config.ODDS_API_BASE_URL}/sports/${sportKey}/events`;
+  const url = `${config.ODDS_API_BASE_URL}/sports/${sportKey}/events`;
   const params = {
-    apiKey: config.ODDS_API_KEY,
     dateFormat: options.dateFormat || 'iso',
     ...(options.commenceTimeFrom ? { commenceTimeFrom: options.commenceTimeFrom } : {}),
     ...(options.commenceTimeTo ? { commenceTimeTo: options.commenceTimeTo } : {}),
     ...(options.eventIds ? { eventIds: options.eventIds } : {})
   };
+  const headers = {
+    apikey: config.ODDS_API_KEY
+  };
 
   let response;
   try {
-    response = await axios.get(baseUrl, { params });
+    response = await axios.get(url, { params, headers });
   } catch (err) {
     if (err.response && err.response.status === 401) {
       const error = new Error('Unauthorized to access external Odds API for events.');
@@ -90,9 +92,17 @@ async function getEventsBySport(sportKey, options = {}) {
  * Fetch odds for all events of a given sportKey, then determine the best (highest) odds
  * for each outcome across all bookmakers.
  *
- * Endpoint: GET /v4/sports/{sportKey}/odds?apiKey=YOUR_API_KEY&regions={regions}&markets={markets}&dateFormat={dateFormat}&oddsFormat={oddsFormat}&eventIds={optional}
+ * Endpoint: GET /v4/sports/{sportKey}/odds
+ * Auth: HTTP header `apikey: YOUR_API_KEY`
  *
- * We return an array of event objects, each in the form:
+ * `options` can include:
+ *   - regions: comma-separated string (e.g. "us,uk,eu")
+ *   - markets: comma-separated string (e.g. "h2h,spreads,totals,outrights")
+ *   - oddsFormat: "decimal" or "american"
+ *   - dateFormat: "iso" or "unix"
+ *   - eventIds: comma-separated event IDs (optional)
+ *
+ * Returns an array of event objects, each in the form:
  * [
  *   {
  *     eventId: "bda33adca828c09dc3cac3a856aef176",
@@ -102,42 +112,37 @@ async function getEventsBySport(sportKey, options = {}) {
  *     awayTeam: "Dallas Cowboys",
  *     bestOdds: {
  *       home_win: Number,
- *       draw: Number (if applicable),
+ *       draw: Number,    // if applicable
  *       away_win: Number
  *     }
  *   },
  *   { ... }
  * ]
- *
- * `options` can include:
- *   - regions: comma-separated string (e.g. "us,uk,eu")
- *   - markets: comma-separated string (e.g. "h2h,spreads,totals,outrights")
- *   - oddsFormat: "decimal" or "american"
- *   - dateFormat: "iso" or "unix"
- *   - eventIds: comma-separated event IDs if you want to filter to specific events
  */
 async function getOddsBySport(sportKey, options = {}) {
-  const baseUrl = `${config.ODDS_API_BASE_URL}/sports/${sportKey}/odds`;
+  const url = `${config.ODDS_API_BASE_URL}/sports/${sportKey}/odds`;
   const params = {
-    apiKey: config.ODDS_API_KEY,
     regions: options.regions || 'us',
     markets: options.markets || 'h2h',
     oddsFormat: options.oddsFormat || 'decimal',
     dateFormat: options.dateFormat || 'iso',
     ...(options.eventIds ? { eventIds: options.eventIds } : {})
   };
+  const headers = {
+    apikey: config.ODDS_API_KEY
+  };
 
   let response;
   try {
-    response = await axios.get(baseUrl, { params });
+    response = await axios.get(url, { params, headers });
   } catch (err) {
-    // Rate limit
+    // Rate limit handling
     if (err.response && err.response.status === 429) {
       const error = new Error('Odds API rate limit exceeded');
       error.code = 'RateLimit';
       throw error;
     }
-    // Unauthorized
+    // Unauthorized handling
     if (err.response && err.response.status === 401) {
       const error = new Error('Unauthorized to access external Odds API for odds.');
       error.code = 'Unauthorized';
@@ -148,7 +153,7 @@ async function getOddsBySport(sportKey, options = {}) {
 
   const eventsWithOdds = response.data; // Array of event objects from external API
 
-  // Each event object example:
+  // Each event object from APILayer looks like:
   // {
   //   id: 'bda33adca828c09dc3cac3a856aef176',
   //   sport_key: 'americanfootball_nfl',
@@ -187,14 +192,14 @@ async function getOddsBySport(sportKey, options = {}) {
       for (const market of book.markets) {
         if (market.key === 'h2h' && Array.isArray(market.outcomes)) {
           for (const outcome of market.outcomes) {
-            // Match home team name
+            // Check home team outcome
             if (
               outcome.name === home_team &&
               (bestHome === null || outcome.price > bestHome)
             ) {
               bestHome = outcome.price;
             }
-            // Match away team name
+            // Check away team outcome
             if (
               outcome.name === away_team &&
               (bestAway === null || outcome.price > bestAway)
@@ -203,7 +208,7 @@ async function getOddsBySport(sportKey, options = {}) {
             }
           }
         }
-        // If 3-way (draw included), find draw outcome
+        // If 3-way market (including a draw), find the draw outcome
         if (
           market.key === 'h2h' &&
           Array.isArray(market.outcomes) &&
@@ -242,9 +247,16 @@ async function getOddsBySport(sportKey, options = {}) {
 
 /**
  * Fetch odds for a single event in all requested markets.
- * Endpoint: GET /v4/sports/{sportKey}/events/{eventId}/odds?apiKey=YOUR_API_KEY&regions={regions}&markets={markets}&oddsFormat={oddsFormat}&dateFormat={dateFormat}
+ * Endpoint: GET /v4/sports/{sportKey}/events/{eventId}/odds
+ * Auth: HTTP header `apikey: YOUR_API_KEY`
  *
- * Returns the full JSON structure (no aggregation), e.g.:
+ * `options` can include:
+ *   - regions: comma-separated (e.g. "us,uk")
+ *   - markets: comma-separated (e.g. "h2h,spreads,totals")
+ *   - oddsFormat: "decimal" or "american"
+ *   - dateFormat: "iso" or "unix"
+ *
+ * Returns the full JSON structure from APILayer, e.g.:
  * {
  *   id: "a512a48a58c4329048174217b2cc7ce0",
  *   sport_key: "americanfootball_nfl",
@@ -252,46 +264,24 @@ async function getOddsBySport(sportKey, options = {}) {
  *   commence_time: "2023-01-01T18:00:00Z",
  *   home_team: "Atlanta Falcons",
  *   away_team: "Arizona Cardinals",
- *   bookmakers: [
- *     {
- *       key: "draftkings",
- *       title: "DraftKings",
- *       last_update: "2023-01-01T05:31:29Z",
- *       markets: [
- *         {
- *           key: "player_pass_tds",
- *           last_update: "2023-01-01T05:31:29Z",
- *           outcomes: [
- *             { name: "Over", description: "David Blough", price: -205, point: 0.5 },
- *             { name: "Under", description: "David Blough", price: 150, point: 0.5 },
- *             ...
- *           ]
- *         }
- *       ]
- *     },
- *     { ... }
- *   ]
+ *   bookmakers: [ { … }, { … } ]
  * }
- *
- * `options` can include:
- *   - regions: comma-separated (e.g. "us,uk")
- *   - markets: comma-separated (e.g. "h2h,spreads,totals")
- *   - oddsFormat: "decimal" or "american"
- *   - dateFormat: "iso" or "unix"
  */
 async function getEventOdds(sportKey, eventId, options = {}) {
-  const baseUrl = `${config.ODDS_API_BASE_URL}/sports/${sportKey}/events/${eventId}/odds`;
+  const url = `${config.ODDS_API_BASE_URL}/sports/${sportKey}/events/${eventId}/odds`;
   const params = {
-    apiKey: config.ODDS_API_KEY,
     regions: options.regions || 'us',
     markets: options.markets || 'h2h',
     oddsFormat: options.oddsFormat || 'decimal',
     dateFormat: options.dateFormat || 'iso'
   };
+  const headers = {
+    apikey: config.ODDS_API_KEY
+  };
 
   let response;
   try {
-    response = await axios.get(baseUrl, { params });
+    response = await axios.get(url, { params, headers });
   } catch (err) {
     if (err.response && err.response.status === 429) {
       const error = new Error('Odds API rate limit exceeded for event odds.');

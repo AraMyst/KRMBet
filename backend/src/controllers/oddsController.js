@@ -1,18 +1,16 @@
-// backend/src/controllers/oddsController.js
-
 const oddsService = require('../services/oddsService');
 
 /**
  * GET /api/odds/sports
  *
- * Retorna a lista de todos os esportes (sport keys) disponíveis na The Odds API.
+ * Returns the list of all sports (sport keys) available in The Odds API.
  */
 exports.getAllSports = async (req, res, next) => {
   try {
     const sportsArray = await oddsService.getAllSports();
     return res.status(200).json(sportsArray);
   } catch (err) {
-    // Se vier 401 da API externa:
+    // If we receive a 401 from the external API, respond with a clear message
     if (err.response && err.response.status === 401) {
       return res
         .status(401)
@@ -25,7 +23,7 @@ exports.getAllSports = async (req, res, next) => {
 /**
  * GET /api/odds/:sportKey
  *
- * Retorna array de objetos “event + bestOdds” para o sportKey solicitado.
+ * Returns an array of objects “event + bestOdds” for the requested sportKey.
  */
 exports.getOddsBySport = async (req, res, next) => {
   try {
@@ -36,23 +34,25 @@ exports.getOddsBySport = async (req, res, next) => {
         .json({ message: 'Missing required path parameter: sportKey.' });
     }
 
-    // Podemos ler filtros opcionais via query, ex.: ?regions=us,uk&markets=h2h,spreads
+    // We can read optional filters via query string, e.g.: ?regions=us,uk&markets=h2h,spreads
     const options = {
-      regions: req.query.regions,       // ex.: "us,uk"
-      markets: req.query.markets,       // ex.: "h2h,spreads"
-      oddsFormat: req.query.oddsFormat, // ex.: "american"
-      dateFormat: req.query.dateFormat  // ex.: "iso"
-      // eventIds não usamos aqui, esse endpoint traz todos os eventos
+      regions: req.query.regions,        // e.g.: "us,uk"
+      markets: req.query.markets,        // e.g.: "h2h,spreads"
+      oddsFormat: req.query.oddsFormat,  // e.g.: "decimal" or "american"
+      dateFormat: req.query.dateFormat   // e.g.: "iso"
+      // eventIds not used here, this endpoint returns all events for the sport
     };
 
     const oddsArray = await oddsService.getOddsBySport(sportKey, options);
     return res.status(200).json(oddsArray);
   } catch (err) {
+    // Rate limit handling
     if (err.code === 'RateLimit') {
       return res
         .status(429)
         .json({ message: 'External Odds API rate limit exceeded. Try again later.' });
     }
+    // Unauthorized handling
     if (err.response && err.response.status === 401) {
       return res
         .status(401)
@@ -65,7 +65,7 @@ exports.getOddsBySport = async (req, res, next) => {
 /**
  * GET /api/odds/:sportKey/events/:eventId
  *
- * Retorna todos os mercados (odds) para um único evento específico.
+ * Returns all markets (odds) for a single specific event.
  */
 exports.getEventOdds = async (req, res, next) => {
   try {
@@ -76,7 +76,7 @@ exports.getEventOdds = async (req, res, next) => {
         .json({ message: 'Missing required path parameters: sportKey and/or eventId.' });
     }
 
-    // Ler filtros opcionais via query string
+    // Read optional filters via query string
     const options = {
       regions: req.query.regions,
       markets: req.query.markets,
@@ -87,11 +87,13 @@ exports.getEventOdds = async (req, res, next) => {
     const eventOddsObj = await oddsService.getEventOdds(sportKey, eventId, options);
     return res.status(200).json(eventOddsObj);
   } catch (err) {
+    // Rate limit handling
     if (err.code === 'RateLimit') {
       return res
         .status(429)
         .json({ message: 'External Odds API rate limit exceeded. Try again later.' });
     }
+    // Unauthorized handling
     if (err.response && err.response.status === 401) {
       return res
         .status(401)
