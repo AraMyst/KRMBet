@@ -1,6 +1,6 @@
 // src/components/Navbar/Navbar.jsx
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import './Navbar.css';
 import logo from '../../assets/images/logo.png';
@@ -18,13 +18,19 @@ const Navbar = () => {
 
       <ul className="nav-links">
         <li>
-          <Link to="/sports">Sports</Link>
+          <NavLink to="/sports" className={({ isActive }) => (isActive ? 'active-link' : undefined)}>
+            Sports
+          </NavLink>
         </li>
         <li>
-          <Link to="/casino">Casino</Link>
+          <NavLink to="/casino" className={({ isActive }) => (isActive ? 'active-link' : undefined)}>
+            Casino
+          </NavLink>
         </li>
         <li>
-          <Link to="/promotions">Promotions</Link>
+          <NavLink to="/promotions" className={({ isActive }) => (isActive ? 'active-link' : undefined)}>
+            Promotions
+          </NavLink>
         </li>
       </ul>
 

@@ -39,6 +39,10 @@
   color: #C7A86B;     /* Fortino gold soft */
 }
 
+.nav-links li a.active-link {
+  text-decoration: underline;
+}
+
 .navbar-right {
   display: flex;
   align-items: center;
