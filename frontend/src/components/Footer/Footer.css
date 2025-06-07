@@ -29,3 +29,13 @@
 .footer-links a:hover {
   color: #6B8E23;       /* Fortino olive green */
 }
+
+.footer-right {
+  margin-top: 1rem;
+}
+
+@media (min-width: 640px) {
+  .footer-right {
+    margin-top: 0;
+  }
+}
