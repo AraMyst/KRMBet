@@ -8,6 +8,7 @@
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
+  margin-top: 1rem; /* space above footer */
 }
 
 .footer-left p {

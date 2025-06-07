@@ -21,7 +21,7 @@ const LanguageSwitcher = () => {
       <select
         value={lang}
         onChange={handleChange}
-        className="bg-fortino-darkGreen text-fortino-softWhite px-2 py-1 rounded-md focus:outline-none focus:ring-2 focus:ring-fortino-goldSoft"
+        className="bg-fortino-darkGreen text-fortino-softWhite border border-fortino-goldSoft px-2 py-1 rounded-md focus:outline-none focus:ring-2 focus:ring-fortino-goldSoft"
       >
         <option value="en">English</option>
         <option value="es">Español</option>
