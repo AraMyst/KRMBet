@@ -1,7 +1,7 @@
 // backend/src/utils/config.js
 require('dotenv').config();
 
-module.exports = {
+const config = {
   // MongoDB connection URI (Atlas or local fallback)
   DATABASE_URI: process.env.DATABASE_URI || 'mongodb://localhost:27017/bettingdb',
 
@@ -15,3 +15,13 @@ module.exports = {
   // Port where the server will listen
   PORT: process.env.PORT || 3000,
 };
+
+// Sanity check to ensure the Odds API base URL is valid
+if (!/^https?:\/\//.test(config.ODDS_API_BASE_URL)) {
+  console.error(
+    `Invalid ODDS_API_BASE_URL '${config.ODDS_API_BASE_URL}'. Must start with http or https.`
+  );
+  process.exit(1);
+}
+
+module.exports = config;
