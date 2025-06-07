@@ -7,7 +7,7 @@ import api from '../services/api';
  *
  * Custom React hook to fetch and manage the user's wallet balance using the shared API service.
  */
-export default function useWallet() {
+export function useWallet() {
   const [balance, setBalance] = useState(null);
   const [walletLoading, setWalletLoading] = useState(false);
   const [error, setError] = useState(null);
