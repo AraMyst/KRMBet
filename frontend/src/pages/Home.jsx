@@ -3,6 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import HomeGamesPreview from '../Casino/HomeGamesPreview';
+import rouletteImage from '../assets/images/roulette-royale.jpg';
 
 /**
  * Home
@@ -39,6 +40,11 @@ const Home = () => {
             Enjoy slots, roulette, poker and more from your browser.
           </p>
           <HomeGamesPreview />
+          <img
+            src={rouletteImage}
+            alt="Roulette Royale"
+            className="w-full my-4 rounded"
+          />
           <Link to={user ? '/casino' : '/login'} className="auth-button mt-4">
             Play Now
           </Link>

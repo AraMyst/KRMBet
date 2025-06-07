@@ -2,6 +2,7 @@
 import React from 'react';
 import CasinoBanner from '../Casino/CasinoBanner';
 import CasinoList from '../Casino/CasinoList';
+import RouletteRoyaleEmbed from '../Casino/RouletteRoyaleEmbed';
 
 /**
  * CasinoPage
@@ -13,6 +14,7 @@ const CasinoPage = () => {
   return (
     <div className="space-y-8 mt-8">
       <CasinoBanner />
+      <RouletteRoyaleEmbed />
       <CasinoList />
     </div>
   );
