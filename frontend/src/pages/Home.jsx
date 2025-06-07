@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import HomeGamesPreview from '../Casino/HomeGamesPreview';
 import rouletteImage from '../assets/images/roulette-royale.jpg';
+import plotLuckImage from '../assets/images/plot-luck.png';
+import slotsSorceryImage from '../assets/images/slots-sorcery.png';
 
 /**
  * Home
@@ -37,11 +39,11 @@ const Home = () => {
             Online Casino
           </h2>
           <HomeGamesPreview />
-          <img
-            src={rouletteImage}
-            alt="Roulette Royale"
-            className="w-48 my-4 rounded"
-          />
+          <div className="flex gap-2 my-4">
+            <img src={rouletteImage} alt="Roulette Royale" className="w-[200px] rounded" />
+            <img src={plotLuckImage} alt="Plot Luck" className="w-[200px] rounded" />
+            <img src={slotsSorceryImage} alt="Slots and Sorcery" className="w-[200px] rounded" />
+          </div>
           <Link to={user ? '/casino' : '/login'} className="auth-button mt-4">
             Play Now
           </Link>
