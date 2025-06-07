@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import LanguageSwitcher from '../../Common/LanguageSwitcher';
 import { useAuth } from '../../hooks/useAuth';
 import './Navbar.css';
+import logo from '../../assets/images/logo.png';
 
 const Navbar = () => {
   const { user, logoutUser } = useAuth();
@@ -12,8 +13,7 @@ const Navbar = () => {
     <nav className="navbar">
       <div className="navbar-left">
         <Link to="/">
-          {/* Replace the src with the correct path to your logo file */}
-          <img src="/assets/images/logo.png" alt="Fortino Logo" className="logo" />
+          <img src={logo} alt="Fortino Logo" className="logo" />
         </Link>
 
         <ul className="nav-links">
