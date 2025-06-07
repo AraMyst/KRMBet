@@ -48,7 +48,7 @@
   gap: 1rem;
 }
 
-.auth-buttons a,
+
 .auth-buttons button.logout-button {
   @apply auth-button;
 }
