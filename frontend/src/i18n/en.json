@@ -1,0 +1,90 @@
+// src/i18n/en.json
+{
+  "common": {
+    "loading": "Loading...",
+    "noData": "No data available."
+  },
+  "auth": {
+    "login": "Log In",
+    "register": "Register",
+    "email": "Email",
+    "password": "Password",
+    "username": "Username",
+    "confirmPassword": "Confirm Password",
+    "loginErrorRequired": "Please enter both email and password.",
+    "registerErrorFillAll": "Please fill in all fields.",
+    "passwordsDoNotMatch": "Passwords do not match.",
+    "loginFailed": "Login failed. Please try again.",
+    "registrationFailed": "Registration failed. Please try again.",
+    "youDontHaveAccount": "Don't have an account? Register here.",
+    "alreadyHaveAccount": "Already have an account? Log In here.",
+    "fromRegistrationSuccess": "Registration successful! Please log in."
+  },
+  "account": {
+    "accountDetails": "Account Details",
+    "username": "Username",
+    "email": "Email",
+    "registeredOn": "Registered On",
+    "accountBalance": "Account Balance"
+  },
+  "bets": {
+    "betsHistory": "Bets History",
+    "event": "Event",
+    "amount": "Amount",
+    "odds": "Odds",
+    "status": "Status",
+    "placedAt": "Placed At",
+    "noBetsFound": "No bets found."
+  },
+  "verification": {
+    "accountVerification": "Account Verification",
+    "verified": "Your account is verified.",
+    "pending": "Your verification is pending review. We will notify you once it is completed.",
+    "unverified": "Your account is not verified. Please upload a valid government ID or document to complete verification.",
+    "uploadDocument": "Upload Document",
+    "uploading": "Uploading...",
+    "selectDocumentError": "Please select a document to upload.",
+    "uploadFailed": "Failed to upload document. Please try again."
+  },
+  "casino": {
+    "welcome": "Welcome to Fortino Casino",
+    "discoverGames": "Discover a variety of thrilling casino games: slots, roulette, poker, and more. Play live with real dealers or enjoy instant-play games from anywhere.",
+    "exploreGames": "Explore Games",
+    "casinoGames": "Casino Games",
+    "playNow": "Play Now",
+    "noGames": "No casino games available at the moment.",
+    "launchGame": "Launch Game",
+    "rtp": "RTP",
+    "volatility": "Volatility",
+    "rules": "Rules"
+  },
+  "chat": {
+    "typeMessage": "Type your message...",
+    "send": "Send",
+    "sending": "Sending..."
+  },
+  "navbar": {
+    "home": "Home",
+    "sports": "Sports",
+    "casino": "Casino",
+    "promotions": "Promotions",
+    "account": "Account",
+    "logout": "Logout",
+    "login": "Log In",
+    "register": "Register"
+  },
+  "footer": {
+    "termsOfService": "Terms of Service",
+    "privacyPolicy": "Privacy Policy",
+    "contact": "Contact",
+    "allRightsReserved": "All rights reserved."
+  },
+  "form": {
+    "submit": "Submit",
+    "loading": "Loading..."
+  },
+  "errors": {
+    "networkError": "Network response was not ok",
+    "genericError": "Oops! Something went wrong. Please try again later."
+  }
+}

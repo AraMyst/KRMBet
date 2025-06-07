@@ -1,0 +1,90 @@
+// src/i18n/pt.json
+{
+  "common": {
+    "loading": "Carregando...",
+    "noData": "Nenhum dado disponível."
+  },
+  "auth": {
+    "login": "Entrar",
+    "register": "Registrar-se",
+    "email": "E-mail",
+    "password": "Senha",
+    "username": "Nome de usuário",
+    "confirmPassword": "Confirmar senha",
+    "loginErrorRequired": "Por favor, insira e-mail e senha.",
+    "registerErrorFillAll": "Por favor preencha todos os campos.",
+    "passwordsDoNotMatch": "As senhas não coincidem.",
+    "loginFailed": "Falha no login. Por favor, tente novamente.",
+    "registrationFailed": "Falha no registro. Por favor, tente novamente.",
+    "youDontHaveAccount": "Não tem conta? Registre-se aqui.",
+    "alreadyHaveAccount": "Já tem conta? Entre aqui.",
+    "fromRegistrationSuccess": "Registro bem-sucedido! Por favor, faça login."
+  },
+  "account": {
+    "accountDetails": "Detalhes da conta",
+    "username": "Nome de usuário",
+    "email": "E-mail",
+    "registeredOn": "Registrado em",
+    "accountBalance": "Saldo da conta"
+  },
+  "bets": {
+    "betsHistory": "Histórico de apostas",
+    "event": "Evento",
+    "amount": "Valor",
+    "odds": "Odds",
+    "status": "Status",
+    "placedAt": "Realizada em",
+    "noBetsFound": "Nenhuma aposta encontrada."
+  },
+  "verification": {
+    "accountVerification": "Verificação da conta",
+    "verified": "Sua conta está verificada.",
+    "pending": "Sua verificação está pendente de análise. Vamos notificá-lo quando for concluída.",
+    "unverified": "Sua conta não está verificada. Por favor, envie um documento de identificação válido para concluir a verificação.",
+    "uploadDocument": "Enviar documento",
+    "uploading": "Enviando...",
+    "selectDocumentError": "Por favor selecione um documento para enviar.",
+    "uploadFailed": "Falha ao enviar o documento. Por favor, tente novamente."
+  },
+  "casino": {
+    "welcome": "Bem-vindo ao Fortino Casino",
+    "discoverGames": "Descubra uma variedade de empolgantes jogos de cassino: caça-níqueis, roleta, pôquer e muito mais. Jogue ao vivo com dealers reais ou aproveite jogos instantâneos de qualquer lugar.",
+    "exploreGames": "Explorar jogos",
+    "casinoGames": "Jogos de cassino",
+    "playNow": "Jogar agora",
+    "noGames": "Nenhum jogo de cassino disponível no momento.",
+    "launchGame": "Iniciar jogo",
+    "rtp": "RTP",
+    "volatility": "Volatilidade",
+    "rules": "Regras"
+  },
+  "chat": {
+    "typeMessage": "Digite sua mensagem...",
+    "send": "Enviar",
+    "sending": "Enviando..."
+  },
+  "navbar": {
+    "home": "Início",
+    "sports": "Esportes",
+    "casino": "Cassino",
+    "promotions": "Promoções",
+    "account": "Conta",
+    "logout": "Sair",
+    "login": "Entrar",
+    "register": "Registrar-se"
+  },
+  "footer": {
+    "termsOfService": "Termos de serviço",
+    "privacyPolicy": "Política de privacidade",
+    "contact": "Contato",
+    "allRightsReserved": "Todos os direitos reservados."
+  },
+  "form": {
+    "submit": "Enviar",
+    "loading": "Carregando..."
+  },
+  "errors": {
+    "networkError": "Resposta da rede não foi ok",
+    "genericError": "Oops! Algo deu errado. Por favor, tente novamente mais tarde."
+  }
+}

@@ -1,0 +1,90 @@
+// src/i18n/es.json
+{
+  "common": {
+    "loading": "Cargando...",
+    "noData": "No hay datos disponibles."
+  },
+  "auth": {
+    "login": "Iniciar sesión",
+    "register": "Registrarse",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "username": "Nombre de usuario",
+    "confirmPassword": "Confirmar contraseña",
+    "loginErrorRequired": "Por favor ingrese correo y contraseña.",
+    "registerErrorFillAll": "Por favor complete todos los campos.",
+    "passwordsDoNotMatch": "Las contraseñas no coinciden.",
+    "loginFailed": "Error al iniciar sesión. Inténtalo de nuevo.",
+    "registrationFailed": "Error en el registro. Inténtalo de nuevo.",
+    "youDontHaveAccount": "¿No tienes cuenta? Regístrate aquí.",
+    "alreadyHaveAccount": "¿Ya tienes cuenta? Inicia sesión aquí.",
+    "fromRegistrationSuccess": "¡Registro exitoso! Por favor inicia sesión."
+  },
+  "account": {
+    "accountDetails": "Detalles de la cuenta",
+    "username": "Nombre de usuario",
+    "email": "Correo electrónico",
+    "registeredOn": "Registrado el",
+    "accountBalance": "Saldo de la cuenta"
+  },
+  "bets": {
+    "betsHistory": "Historial de apuestas",
+    "event": "Evento",
+    "amount": "Cantidad",
+    "odds": "Cuotas",
+    "status": "Estado",
+    "placedAt": "Realizada el",
+    "noBetsFound": "No se encontraron apuestas."
+  },
+  "verification": {
+    "accountVerification": "Verificación de cuenta",
+    "verified": "Tu cuenta está verificada.",
+    "pending": "Tu verificación está pendiente de revisión. Te notificaremos cuando esté completa.",
+    "unverified": "Tu cuenta no está verificada. Por favor sube un documento de identidad válido para completar la verificación.",
+    "uploadDocument": "Subir documento",
+    "uploading": "Subiendo...",
+    "selectDocumentError": "Por favor selecciona un documento para subir.",
+    "uploadFailed": "Error al subir el documento. Inténtalo de nuevo."
+  },
+  "casino": {
+    "welcome": "Bienvenido a Fortino Casino",
+    "discoverGames": "Descubre una variedad de emocionantes juegos de casino: tragamonedas, ruleta, poker y más. Juega en vivo con crupieres reales o disfruta de juegos instantáneos desde cualquier lugar.",
+    "exploreGames": "Explorar juegos",
+    "casinoGames": "Juegos de casino",
+    "playNow": "Jugar ahora",
+    "noGames": "No hay juegos de casino disponibles por el momento.",
+    "launchGame": "Iniciar juego",
+    "rtp": "RTP",
+    "volatility": "Volatilidad",
+    "rules": "Reglas"
+  },
+  "chat": {
+    "typeMessage": "Escribe tu mensaje...",
+    "send": "Enviar",
+    "sending": "Enviando..."
+  },
+  "navbar": {
+    "home": "Inicio",
+    "sports": "Deportes",
+    "casino": "Casino",
+    "promotions": "Promociones",
+    "account": "Cuenta",
+    "logout": "Cerrar sesión",
+    "login": "Iniciar sesión",
+    "register": "Registrarse"
+  },
+  "footer": {
+    "termsOfService": "Términos de servicio",
+    "privacyPolicy": "Política de privacidad",
+    "contact": "Contacto",
+    "allRightsReserved": "Todos los derechos reservados."
+  },
+  "form": {
+    "submit": "Enviar",
+    "loading": "Cargando..."
+  },
+  "errors": {
+    "networkError": "La respuesta de la red no fue correcta",
+    "genericError": "¡Vaya! Algo salió mal. Por favor, inténtalo más tarde."
+  }
+}
