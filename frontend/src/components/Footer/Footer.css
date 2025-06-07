@@ -10,7 +10,12 @@
   flex-wrap: wrap;
 }
 
-.footer-left p {
+.footer-center {
+  flex: 1;
+  text-align: center;
+}
+
+.footer-center p {
   margin: 0;
   font-size: 0.9rem;
 }
