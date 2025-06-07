@@ -12,16 +12,7 @@ const Home = () => {
   const { user } = useAuth();
   return (
     <div className="max-w-5xl mx-auto mt-12 space-y-12">
-      {/* Hero Section */}
-      <section className="text-center">
-        <h1 className="text-5xl font-bold text-fortino-goldSoft mb-4">
-          Fortino Casino & Sportsbook
-        </h1>
-        <p className="text-fortino-softWhite text-lg max-w-2xl mx-auto">
-          Minimalist, elegant platform for sports betting and casino gaming.
-          Play responsibly and enjoy a seamless experience.
-        </p>
-      </section>
+
 
       {/* Feature Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
