@@ -15,22 +15,19 @@ const Navbar = () => {
         <Link to="/">
           <img src={logo} alt="Fortino Logo" className="logo" />
         </Link>
-
-        <ul className="nav-links">
-          <li>
-            <Link to="/">Home</Link>
-          </li>
-          <li>
-            <Link to="/sports">Sports</Link>
-          </li>
-          <li>
-            <Link to="/casino">Casino</Link>
-          </li>
-          <li>
-            <Link to="/promotions">Promotions</Link>
-          </li>
-        </ul>
       </div>
+
+      <ul className="nav-links">
+        <li>
+          <Link to="/sports">Sports</Link>
+        </li>
+        <li>
+          <Link to="/casino">Casino</Link>
+        </li>
+        <li>
+          <Link to="/promotions">Promotions</Link>
+        </li>
+      </ul>
 
       <div className="navbar-right">
         <LanguageSwitcher />
