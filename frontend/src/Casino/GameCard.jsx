@@ -1,6 +1,7 @@
 // src/Casino/GameCard.jsx
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../hooks/useAuth';
 
 /**
  * GameCard
@@ -16,6 +17,7 @@ import { Link } from 'react-router-dom';
  *     }
  */
 const GameCard = ({ game }) => {
+  const { user } = useAuth();
   return (
     <div className="bg-fortino-darkGreen rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-200">
       {/* Game thumbnail or icon */}
@@ -45,7 +47,7 @@ const GameCard = ({ game }) => {
 
         {/* Link to GameDetail page */}
         <Link
-          to={`/casino/${game.id}`}
+          to={user ? `/casino/${game.id}` : '/login'}
           className="inline-block bg-fortino-goldSoft text-black font-medium px-4 py-2 rounded-md hover:bg-fortino-goldSoft/90 transition duration-150"
         >
           Play Now
