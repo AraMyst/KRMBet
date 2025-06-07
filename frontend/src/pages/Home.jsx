@@ -1,7 +1,6 @@
 // src/pages/Home.jsx
 import React from 'react';
 import { Link } from 'react-router-dom';
-import Button from '../components/UI/Button';
 
 /**
  * Home
@@ -32,10 +31,7 @@ const Home = () => {
           <p className="text-fortino-softWhite">
             Browse live odds and place bets on your favorite sports.
           </p>
-          <Link
-            to="/sports"
-            className="inline-block bg-fortino-goldSoft text-fortino-darkGreen px-4 py-2 rounded-md font-medium hover:opacity-90 mt-4"
-          >
+          <Link to="/sports" className="auth-button mt-4">
             Bet Now
           </Link>
         </div>
@@ -48,10 +44,7 @@ const Home = () => {
           <p className="text-fortino-softWhite">
             Enjoy slots, roulette, poker and more from your browser.
           </p>
-          <Link
-            to="/casino"
-            className="inline-block bg-fortino-goldSoft text-fortino-darkGreen px-4 py-2 rounded-md font-medium hover:opacity-90 mt-4"
-          >
+          <Link to="/casino" className="auth-button mt-4">
             Play Now
           </Link>
         </div>
@@ -67,10 +60,8 @@ const Home = () => {
           <p className="text-fortino-softWhite">
             Play with real dealers in real-time via live stream.
           </p>
-          <Link to="/casino">
-            <Button variant="primary" className="mt-4">
-              Learn More
-            </Button>
+          <Link to="/casino" className="auth-button mt-4">
+            Learn More
           </Link>
         </div>
       </div>
