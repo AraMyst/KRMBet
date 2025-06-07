@@ -36,14 +36,11 @@ const Home = () => {
           <h2 className="text-2xl font-semibold text-fortino-softWhite mb-2">
             Online Casino
           </h2>
-          <p className="text-fortino-softWhite">
-            Enjoy slots, roulette, poker and more from your browser.
-          </p>
           <HomeGamesPreview />
           <img
             src={rouletteImage}
             alt="Roulette Royale"
-            className="w-full my-4 rounded"
+            className="w-48 my-4 rounded"
           />
           <Link to={user ? '/casino' : '/login'} className="auth-button mt-4">
             Play Now
