@@ -75,6 +75,7 @@ const Home = () => {
         </Link>
       </div>
     </div>
-);
+  );
+};
 
 export default Home;
