@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import casinoService from '../services/casinoService';
-import GameCard from './GameCard';
+import GameThumbnail from './GameThumbnail';
 
 const HomeGamesPreview = () => {
   const [games, setGames] = useState([]);
@@ -23,9 +23,7 @@ const HomeGamesPreview = () => {
   return (
     <div className="flex gap-4 overflow-x-auto py-4">
       {games.map((game) => (
-        <div key={game._id || game.id} className="w-64 flex-shrink-0">
-          <GameCard game={game} />
-        </div>
+        <GameThumbnail key={game._id || game.id} game={game} />
       ))}
     </div>
   );
