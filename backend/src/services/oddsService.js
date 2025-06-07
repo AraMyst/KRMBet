@@ -1,5 +1,4 @@
 // backend/src/services/oddsService.js
-
 const axios = require('axios');
 const config = require('../utils/config');
 
@@ -75,7 +74,7 @@ async function getOddsBySport(sportKey, options = {}) {
     markets:    options.markets    || 'h2h',
     oddsFormat: options.oddsFormat || 'decimal',
     dateFormat: options.dateFormat || 'iso',
-    ...(options.eventIds && { eventIds: options.eventIds })
+    ...(options.eventIds && { eventIds: options.eventIds }),
   };
 
   let response;
