@@ -23,6 +23,8 @@
 .footer-links {
   display: flex;
   gap: 1rem;
+  justify-content: center;
+  flex: 1;
 }
 
 .footer-links a {
