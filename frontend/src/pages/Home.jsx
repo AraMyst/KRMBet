@@ -25,33 +25,37 @@ const Home = () => {
       {/* Feature Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
         {/* Sports Betting */}
-        <Link to="/sports" className="p-6 bg-fortino-darkGreen rounded-lg hover:bg-fortino-darkGreen/80 transition">
+        <div className="p-6 bg-fortino-darkGreen rounded-lg hover:bg-fortino-darkGreen/80 transition">
           <h2 className="text-2xl font-semibold text-fortino-softWhite mb-2">
             Sports Betting
           </h2>
           <p className="text-fortino-softWhite">
             Browse live odds and place bets on your favorite sports.
           </p>
-          <Button variant="secondary" className="mt-4">
-            Bet Now
-          </Button>
-        </Link>
+          <Link to="/sports">
+            <Button variant="primary" className="mt-4">
+              Bet Now
+            </Button>
+          </Link>
+        </div>
 
         {/* Online Casino */}
-        <Link to="/casino" className="p-6 bg-fortino-darkGreen rounded-lg hover:bg-fortino-darkGreen/80 transition">
+        <div className="p-6 bg-fortino-darkGreen rounded-lg hover:bg-fortino-darkGreen/80 transition">
           <h2 className="text-2xl font-semibold text-fortino-softWhite mb-2">
             Online Casino
           </h2>
           <p className="text-fortino-softWhite">
             Enjoy slots, roulette, poker and more from your browser.
           </p>
-          <Button variant="primary" className="mt-4">
-            Play Now
-          </Button>
-        </Link>
+          <Link to="/casino">
+            <Button variant="primary" className="mt-4">
+              Play Now
+            </Button>
+          </Link>
+        </div>
 
         {/* Live Casino */}
-        <Link to="/casino" className="p-6 bg-fortino-darkGreen rounded-lg hover:bg-fortino-darkGreen/80 transition relative">
+        <div className="p-6 bg-fortino-darkGreen rounded-lg hover:bg-fortino-darkGreen/80 transition relative">
           <span className="absolute top-4 right-4 bg-fortino-oliveGreen text-black text-xs font-semibold px-2 py-1 rounded">
             LIVE
           </span>
@@ -61,10 +65,12 @@ const Home = () => {
           <p className="text-fortino-softWhite">
             Play with real dealers in real-time via live stream.
           </p>
-          <Button variant="warning" className="mt-4">
-            Learn More
-          </Button>
-        </Link>
+          <Link to="/casino">
+            <Button variant="primary" className="mt-4">
+              Learn More
+            </Button>
+          </Link>
+        </div>
       </div>
     </div>
   );
