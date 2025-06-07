@@ -47,17 +47,20 @@ const GameDetail = () => {
     return <div>Game not found.</div>;
   }
 
+  const name = game.name || game.title;
+  const imageUrl = game.imageUrl || game.thumbnailUrl;
+
   return (
     <div className="max-w-4xl mx-auto p-6 bg-fortino-darkGreen rounded-lg text-fortino-softWhite">
       {/* Game Title */}
-      <h1 className="text-4xl font-bold mb-4">{game.name}</h1>
+      <h1 className="text-4xl font-bold mb-4">{name}</h1>
 
       <div className="flex flex-col md:flex-row gap-6">
         {/* Left: Game Image */}
         <div className="md:w-1/2 w-full h-64 md:h-auto overflow-hidden rounded-lg shadow-lg">
           <img
-            src={game.imageUrl}
-            alt={game.name}
+            src={imageUrl}
+            alt={name}
             className="object-cover w-full h-full"
             onError={(e) => {
               e.currentTarget.src =

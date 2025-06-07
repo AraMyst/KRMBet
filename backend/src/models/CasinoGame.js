@@ -19,6 +19,10 @@ const casinoGameSchema = new Schema({
     type: String,
     required: true,
   },
+  playUrl: {
+    type: String,
+    required: true,
+  },
   description: {
     type: String,
   },
