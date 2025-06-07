@@ -12,7 +12,7 @@ import HomeGamesPreview from '../Casino/HomeGamesPreview';
 const Home = () => {
   const { user } = useAuth();
   return (
-    <div className="max-w-5xl mx-auto mt-12 space-y-12">
+    <div className="max-w-5xl mx-auto mt-12 space-y-12 pb-20">
 
 
       {/* Feature Cards */}
