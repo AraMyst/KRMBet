@@ -1,3 +1,4 @@
+// backend/src/utils/config.js
 require('dotenv').config();
 
 module.exports = {
@@ -7,10 +8,10 @@ module.exports = {
   // JWT secret for signing and verifying tokens
   JWT_SECRET: process.env.JWT_SECRET || 'your_default_jwt_secret',
 
-  // Odds API configuration (read from environment)
-  // Point to APILayer Odds endpoint and send API key in HTTP header `apikey`
-  ODDS_API_BASE_URL: process.env.ODDS_API_BASE_URL || 'https://api.apilayer.com/odds/v4',
-  ODDS_API_KEY: process.env.ODDS_API_KEY || '',
+  // Odds API configuration
+  // Point to The Odds API v4 endpoint, and send API key as query parameter `apiKey`
+  ODDS_API_BASE_URL: process.env.ODDS_API_BASE_URL || 'https://api.the-odds-api.com/v4',
+  ODDS_API_KEY: process.env.ODDS_API_KEY,
 
   // Port where the server will listen
   PORT: process.env.PORT || 3000,

@@ -1,0 +1,132 @@
+/* frontend/src/index.css */
+
+/* ---------------------------------------------------
+   Tailwind CSS Imports
+   ---------------------------------------------------
+   Import Tailwind's base styles, component classes,
+   and utility classes in this order.
+--------------------------------------------------- */
+@tailwind base;
+@tailwind components;
+
+/* ---------------------------------------------------
+   Design Tokens (CSS Variables)
+   --------------------------------------------------- */
+:root {
+  /* Deep Dark Green (main background) */
+  --color-primary-dark: #003300;
+
+  /* Soft Gold (highlight text & buttons) */
+  --color-secondary-gold: #D4AF37;
+
+  /* Dark Red (action buttons: Bet Now, Bonus) */
+  --color-danger-dark: #8B0000;
+
+  /* Soft White (main text & icons) */
+  --color-light: #F5F5F5;
+
+  /* Dark Brown (details & icon outlines) */
+  --color-accent-brown: #4B2E2E;
+
+  /* Medium Olive Green (LIVE badge background) */
+  --color-live-olive: #808000;
+}
+
+/* ---------------------------------------------------
+   Global Styles
+   --------------------------------------------------- */
+html {
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+               "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans",
+               sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+               "Segoe UI Symbol", "Noto Color Emoji";
+  line-height: 1.5;
+  background-color: var(--color-primary-dark);
+  color: var(--color-light);
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ---------------------------------------------------
+   Typography
+   --------------------------------------------------- */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600;
+  color: var(--color-light);
+  margin: 0;
+}
+
+p {
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+/* ---------------------------------------------------
+   Button Styles
+   --------------------------------------------------- */
+.btn {
+  @apply inline-block px-4 py-2 rounded-md font-medium transition;
+}
+
+.btn-primary {
+  background-color: var(--color-secondary-gold);
+  color: var(--color-primary-dark);
+}
+
+.btn-primary:hover {
+  filter: brightness(0.9);
+}
+
+.btn-danger {
+  background-color: var(--color-danger-dark);
+  color: var(--color-light);
+}
+
+.btn-danger:hover {
+  filter: brightness(0.9);
+}
+
+/* ---------------------------------------------------
+   Badge / Live Indicator
+   --------------------------------------------------- */
+.badge-live {
+  @apply inline-block px-2 py-1 text-xs font-semibold uppercase rounded;
+  background-color: var(--color-live-olive);
+  color: var(--color-light);
+}
+
+/* ---------------------------------------------------
+   Card Component
+   --------------------------------------------------- */
+.card {
+  @apply bg-white bg-opacity-5 shadow-md rounded-lg overflow-hidden;
+}
+
+/* ---------------------------------------------------
+   Utility Overrides & Custom Utilities
+   --------------------------------------------------- */
+/* Example: Center container */
+.container {
+  @apply mx-auto px-4;
+}
+
+/* Example: Smooth link transitions */
+a {
+  @apply transition-colors;
+  color: var(--color-secondary-gold);
+}
+
+a:hover {
+  @apply underline;
+}
+
+/* ---------------------------------------------------
+   Tailwind Utility Classes
+   --------------------------------------------------- */
+@tailwind utilities;
