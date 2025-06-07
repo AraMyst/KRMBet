@@ -2,6 +2,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
+import HomeGamesPreview from '../Casino/HomeGamesPreview';
 
 /**
  * Home
@@ -37,6 +38,7 @@ const Home = () => {
           <p className="text-fortino-softWhite">
             Enjoy slots, roulette, poker and more from your browser.
           </p>
+          <HomeGamesPreview />
           <Link to={user ? '/casino' : '/login'} className="auth-button mt-4">
             Play Now
           </Link>
