@@ -2,6 +2,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './Footer.css';
+import LanguageSwitcher from '../../Common/LanguageSwitcher';
 
 const Footer = () => {
   return (
@@ -14,6 +15,10 @@ const Footer = () => {
         <Link to="/terms">Terms of Service</Link>
         <Link to="/privacy">Privacy Policy</Link>
         <Link to="/contact">Contact</Link>
+      </div>
+
+      <div className="footer-right">
+        <LanguageSwitcher />
       </div>
     </footer>
   );

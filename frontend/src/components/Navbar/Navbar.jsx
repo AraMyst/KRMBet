@@ -1,7 +1,6 @@
 // src/components/Navbar/Navbar.jsx
 import React from 'react';
 import { Link } from 'react-router-dom';
-import LanguageSwitcher from '../../Common/LanguageSwitcher';
 import { useAuth } from '../../hooks/useAuth';
 import './Navbar.css';
 import logo from '../../assets/images/logo.png';
@@ -30,7 +29,6 @@ const Navbar = () => {
       </ul>
 
       <div className="navbar-right">
-        <LanguageSwitcher />
 
         {user ? (
           <div className="auth-buttons">
