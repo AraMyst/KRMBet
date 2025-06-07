@@ -32,10 +32,11 @@ const Home = () => {
           <p className="text-fortino-softWhite">
             Browse live odds and place bets on your favorite sports.
           </p>
-          <Link to="/sports">
-            <Button variant="primary" className="mt-4">
-              Bet Now
-            </Button>
+          <Link
+            to="/sports"
+            className="inline-block bg-fortino-goldSoft text-fortino-darkGreen px-4 py-2 rounded-md font-medium hover:opacity-90 mt-4"
+          >
+            Bet Now
           </Link>
         </div>
 
@@ -47,10 +48,11 @@ const Home = () => {
           <p className="text-fortino-softWhite">
             Enjoy slots, roulette, poker and more from your browser.
           </p>
-          <Link to="/casino">
-            <Button variant="primary" className="mt-4">
-              Play Now
-            </Button>
+          <Link
+            to="/casino"
+            className="inline-block bg-fortino-goldSoft text-fortino-darkGreen px-4 py-2 rounded-md font-medium hover:opacity-90 mt-4"
+          >
+            Play Now
           </Link>
         </div>
 
