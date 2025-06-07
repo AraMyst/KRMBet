@@ -7,7 +7,7 @@ import LanguageSwitcher from '../../Common/LanguageSwitcher';
 const Footer = () => {
   return (
     <footer className="footer">
-      <div className="footer-center">
+      <div className="footer-left">
         <p>© 2025 Fortino Casino.</p>
       </div>
 
